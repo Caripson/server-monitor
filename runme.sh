@@ -1,0 +1,1 @@
+declare -a arr=("8.8.8.8@SESTO0852-CC1" "99.99.99.99@SESTO0852-CC2")
