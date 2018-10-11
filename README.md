@@ -44,11 +44,11 @@ wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_5.3.0_a
 sudo dpkg -i grafana_5.3.0_amd64.deb
 ```
 
-###Create Data source for InfluxDb in Grafana
+## Create Data source for InfluxDb in Grafana
 
 ![Screenshot](influxdb-grafana.png)
 
-###Setup script
+## Setup script
 
 Update script with server settings
 ```
@@ -85,7 +85,7 @@ crontab -e
 * * * * * ( sleep 30 ; /tmp/server-monitor/runme.sh )
 ```
 
-###Import dashboard in grafana
+## Import dashboard in grafana
 Create new, import dashboard
 ```
 Uploda the jsoson file from
