@@ -1,11 +1,9 @@
+#!/bin/bash
 
-#!/usr/bin/env bash
 
+###chmod u+x
 declare -a arr=("8.8.8.8@SESTO0852-CC1" "99.99.99.99@SESTO0852-CC2")
 dnsname="my-server.com"
-
-
-
 influddb="127.0.0.1:8086"
 
 
