@@ -98,6 +98,7 @@ crontab -e
 * * * * * /tmp/server-monitor/runme.sh
 * * * * * ( sleep 30 ; /tmp/server-monitor/runme.sh )
 ```
+Setup the scrip on multiple agents for better monitoring.
 
 ## Import dashboard in grafana
 
