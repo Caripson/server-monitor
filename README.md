@@ -4,6 +4,7 @@ Simple server monitor with agents that reports to influxdb and grafana
 
 ![Screenshot](dashboard.png)
 
+
 ## Setup
 
 This setup is for Ubuntu server 18.04
