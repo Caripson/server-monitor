@@ -98,6 +98,7 @@ crontab -e
 * * * * * /tmp/server-monitor/runme.sh
 * * * * * ( sleep 30 ; /tmp/server-monitor/runme.sh )
 ```
+Setup the scrip on multiple agents for better monitoring.
 
 ## Import dashboard in grafana
 
@@ -107,3 +108,8 @@ Create new, import dashboard
 Uploda the jsoson file from
 /tmp/server-monitor/dashboard.json
 ```
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/Caripson/server-monitor/badge.svg?style=beer-square)](https://beerpay.io/Caripson/server-monitor)  [![Beerpay](https://beerpay.io/Caripson/server-monitor/make-wish.svg?style=flat-square)](https://beerpay.io/Caripson/server-monitor?focus=wish)
