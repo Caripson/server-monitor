@@ -1,138 +1,159 @@
 # Server Monitor 2.0
 
-**Modern, open-source server and network monitoring with plug-and-play agents, InfluxDB, and Grafana dashboards. Crowdsourcing and alerting ready.**
+![Server Monitor Dashboard](docs/demo-dashboard.png)
+![Leaderboard Example](docs/demo-leaderboard.png)
+
+[![Docker Ready](https://img.shields.io/badge/docker-ready-blue.svg)]()
+[![Stars](https://img.shields.io/github/stars/Caripson/server-monitor)]()
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)]()
+
+Open-source, plug-and-play server & network monitoring with Bash/Python agents, InfluxDB 2.x, Grafana 10+ dashboards, public leaderboard, and real-time alerts.
 
 ---
 
-> ⚡️ **Version 2.0 in progress!**  
-> See [ROADMAP.md](./ROADMAP.md) for all planned updates and features.  
-> This project is being fully modernized for 2024+ – Docker-first, Python and Bash agents, YAML/JSON config, and open community support.
+## 🚀 Quick Start (Docker Compose)
+
+1. Clone the repo and enter the directory:
+    ```bash
+    git clone https://github.com/Caripson/server-monitor.git
+    cd server-monitor
+    ```
+
+2. Start InfluxDB and Grafana:
+    ```bash
+    docker compose up -d
+    ```
+
+- InfluxDB: http://localhost:8086  
+  User: `admin`, Password: `supersecret`, Org: `server-monitor`, Token: `mytoken`
+- Grafana: http://localhost:3000  
+  User: `admin`, Password: `admin`
 
 ---
 
-## What’s new (work in progress):
+## 🕵️‍♂️ Add Monitoring Agents
 
-- Docker Compose for one-line startup
-- InfluxDB 2.x and Grafana 10+ support
-- Plug-and-play agent (Bash/Python) – monitor HTTP, DNS, API endpoints
-- Crowdsourcing: Contribute data from anywhere, see public dashboards!
-- Smart alerts (Slack, Discord, Email)
-- Modern onboarding and docs
+Define your endpoints in `endpoints.yml`:
+
+```yaml
+agent: your-unique-agent-name  # e.g. johancar-stockholm-home
+
+endpoints:
+  - url: https://www.google.com/
+    name: Google
+    type: http
+  - url: 8.8.8.8
+    name: Google DNS
+    type: ping
+```
+
+**Run the Bash agent:**
+```bash
+pip install pyyaml  # for yaml parsing
+chmod +x agent.sh
+./agent.sh
+```
+
+**Or use the Python agent:**
+```bash
+pip install requests pyyaml
+python3 agent.py
+```
+
+Metrics are sent directly to InfluxDB.  
+Run on any server, VM or your local machine!
 
 ---
 
-# server-monitor
+## 📊 Automatic Grafana Setup
 
-Simple server monitor with agents that reports to influxdb and grafana
+Dashboards and InfluxDB datasource are provisioned automatically!
 
-![Screenshot](dashboard.png)
+- Open Grafana ([http://localhost:3000](http://localhost:3000), admin/admin)
+- Dashboard: “Server Monitor” (in root folder)
+- Data is available as soon as your agent is running.
 
+---
 
-## Setup
+## 🌍 Join the Community Monitor
 
-This setup is for Ubuntu server 18.04
+Want to contribute your measurements to the public leaderboard?
 
+1. Add a unique `agent` name in your `endpoints.yml`.
+2. Change your agent’s InfluxDB URL and TOKEN to the community server (see wiki for details).
+3. Start your agent – your data feeds the public dashboard!
 
-1. Install git
+**See the public dashboard:**  
+[https://community.monitor.example.com/grafana/d/public/leaderboard](https://community.monitor.example.com/grafana/d/public/leaderboard)
 
+---
+
+## 📡 Public REST API
+
+Want to fetch raw metrics or build your own dashboard?
+
+**Example:** Query average HTTP latency (last 24h)
+```bash
+curl -G "https://community.monitor.example.com/api/v2/query?org=server-monitor"   -H "Authorization: Token YOUR_PUBLIC_TOKEN"   --data-urlencode 'query=from(bucket: "public") |> range(start: -24h) |> filter(fn: (r) => r._field == "time_total") |> group(columns:["agent"]) |> mean()'
 ```
-sudo apt-get -y install git
+See [InfluxDB 2.x API Docs](https://docs.influxdata.com/influxdb/v2.0/api/) for more info.
 
-```
+---
 
-Make tmp directory and clone
+## 🚨 Alerts & Notifications
 
-```
-cd /
-sudo mkdir /tmp
-cd /tmp
-git clone https://github.com/Caripson/server-monitor.git
-```
+Set up alerts in Grafana for real-time monitoring!
 
-Setup influxdb
+- Slack, Discord, email, or any webhook
+- Example: Alert if any endpoint has time_total > 2 seconds
+- Go to: Alerting → Contact points → Add your notifier
+- Create alert rule on any panel with your threshold
 
-```
-curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
-source /etc/lsb-release
-echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+> See Grafana docs: https://grafana.com/docs/grafana/latest/alerting/
 
-```
+---
 
-Then, install and start the InfluxDB service:
+## 🛠️ Building on the Data: API & Anomaly Detection
 
-```
-sudo apt-get update && sudo apt-get install influxdb
-sudo systemctl unmask influxdb.service
-sudo systemctl start influxdb
-```
+- Fetch your metrics via the REST API (see above).
+- Use included example scripts to detect anomalies or build your own integrations.
+- Easily trigger Slack, mail, or dashboard updates from code.
 
-Config InfluxDB
+---
 
-```
-https://docs.influxdata.com/influxdb/v1.6/administration/config/
-```
+## 🤝 Contributing
 
-Setup grafana
+Want to help?  
+- Fork this repo & create a feature branch  
+- Add your scripts, dashboards or docs  
+- Open a pull request!  
+- Or open an Issue for bugs, feature ideas or feedback
 
-```
-wget https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_5.3.0_amd64.deb
-sudo dpkg -i grafana_5.3.0_amd64.deb
-```
+*All contributors get a mention in the README and leaderboard if you want!*
 
-## Create Data source for InfluxDb in Grafana
+---
 
-![Screenshot](influxdb-grafana.png)
+## 🗺️ Roadmap
 
-## Setup script
+See [ROADMAP.md](./ROADMAP.md) for planned features and progress.
 
-Update script with server settings
+---
 
-```
-vi /tmp/server-monitor/runme.sh
+## ❓ FAQ
 
-#update array with server ip and name of the server
-declare -a arr=("8.8.8.8@SESTO0852-CC1" "99.99.99.99@SESTO0852-CC2")
+- **“I can't connect my agent to InfluxDB?”**  
+  Make sure you're using the correct URL, org, bucket, and token (see Quick Start).
+- **“How do I set up alerts for email instead of Slack?”**  
+  Use Grafana alerting (Alerting → Contact Points → Add Email).
+- **“Can I run the agent on Windows/Mac?”**  
+  Yes! Both Bash and Python agents work cross-platform.
 
-#update dns record we should check
-dnsname="my-server.com"
+---
 
-#Update server adress for InfluxDB
-influddb="127.0.0.1:8086"
+## 💬 Community
 
-#Update the file url to the file you want to curl
-sURL=https://${NAMES[0]}/img/36090/r20-100KB.png
-```
+Questions? Want to discuss monitoring or share your dashboards?
+- Or open a GitHub Discussion
 
-chmod the runme.sh
+---
 
-```
-chmod u+x vi /tmp/server-monitor/runme.sh
-
-```
-
-Add the script to crontab
-
-```
-crontab -e
-
-# run evey min
-* * * * * /tmp/server-monitor/runme.sh
-# every 30 select
-* * * * * /tmp/server-monitor/runme.sh
-* * * * * ( sleep 30 ; /tmp/server-monitor/runme.sh )
-```
-Setup the scrip on multiple agents for better monitoring.
-
-## Import dashboard in grafana
-
-Create new, import dashboard
-
-```
-Uploda the jsoson file from
-/tmp/server-monitor/dashboard.json
-```
-
-## Support on Beerpay
-Hey dude! Help me out for a couple of :beers:!
-
-[![Beerpay](https://beerpay.io/Caripson/server-monitor/badge.svg?style=beer-square)](https://beerpay.io/Caripson/server-monitor)  [![Beerpay](https://beerpay.io/Caripson/server-monitor/make-wish.svg?style=flat-square)](https://beerpay.io/Caripson/server-monitor?focus=wish)
