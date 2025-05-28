@@ -82,7 +82,7 @@ Want to contribute your measurements to the public leaderboard?
 3. Start your agent – your data feeds the public dashboard!
 
 **See the public dashboard:**  
-([https://grafana.com/grafana/dashboards/](https://grafana.com/grafana/dashboards/)
+[https://grafana.com/grafana/dashboards/](https://grafana.com/grafana/dashboards/)
 
 ---
 
