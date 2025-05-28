@@ -9,6 +9,8 @@ TOKEN = "mytoken"
 with open("endpoints.yml") as f:
     config = yaml.safe_load(f)
 
+agent_name = config.get("agent", "anonymous")
+
 for e in config["endpoints"]:
     name = e["name"]
     url = e["url"]
@@ -17,17 +19,17 @@ for e in config["endpoints"]:
     if typ == "http":
         try:
             r = requests.get(url, timeout=5)
-            t_nl = r.elapsed.total_seconds()
-            line = f'monitor,name={name},type=http time_total={t_nl} {timestamp}'
-        except Exception as ex:
-            line = f'monitor,name={name},type=http time_total=0 {timestamp}'
+            total_time = r.elapsed.total_seconds()
+            line = f'monitor,name={name},type={typ},agent={agent_name} time_total={total_time} {timestamp}'
+        except Exception:
+            line = f'monitor,name={name},type={typ},agent={agent_name} time_total=0 {timestamp}'
     elif typ == "ping":
         try:
             output = subprocess.check_output(f'ping -c 1 -w 1 {url}', shell=True).decode()
             ms = float(output.split("time=")[-1].split(" ")[0])
-            line = f'monitor,name={name},type=ping ping_time={ms} {timestamp}'
+            line = f'monitor,name={name},type={typ},agent={agent_name} ping_time={ms} {timestamp}'
         except Exception:
-            line = f'monitor,name={name},type=ping ping_time=0 {timestamp}'
+            line = f'monitor,name={name},type={typ},agent={agent_name} ping_time=0 {timestamp}'
     else:
         continue
     headers = {"Authorization": f"Token {TOKEN}"}
