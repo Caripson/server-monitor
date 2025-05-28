@@ -17,24 +17,60 @@ It is designed for **everyone** – from solo developers and small teams to powe
 
 ---
 
-## Why does this project exist? 🎯
+## 🐳 Installing Docker (Linux / Windows / macOS)
 
-- **Internet monitoring shouldn't be hard**. Most commercial tools are complex, expensive, or limit transparency.
-- **You own your data.** You choose if it’s private or public.
-- **Crowdsourced stats are powerful.** By sharing anonymized metrics, we all get a better picture of network health and CDN/provider performance – globally or regionally.
-- **Easy, fast setup.** From git clone to dashboard in minutes.
+**Server Monitor 2.0 uses Docker Compose for the easiest possible setup!**
+
+### 👉 How to install Docker & Docker Compose
+
+#### **Linux (Ubuntu/Debian)**
+```bash
+# Install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Add your user to docker group (so you don't need sudo)
+sudo usermod -aG docker $USER
+# Log out and back in, then:
+
+# Install Docker Compose plugin
+sudo apt-get update
+sudo apt-get install docker-compose-plugin
+
+# Test your install
+docker --version
+docker compose version
+```
+
+#### **Windows 10/11**
+1. [Download Docker Desktop for Windows](https://www.docker.com/products/docker-desktop)
+2. Install as administrator. Enable WSL2 backend if prompted.
+3. Open "Docker Desktop" and ensure it’s running.
+4. Use Windows Terminal or PowerShell to run all docker commands.
+
+#### **macOS (OSX)**
+1. [Download Docker Desktop for Mac](https://www.docker.com/products/docker-desktop)
+2. Install and start Docker Desktop.
+3. Open Terminal and test:
+    ```bash
+    docker --version
+    docker compose version
+    ```
 
 ---
 
-## Key Features
+**After installing Docker:**  
+You can now run the Quick Start commands:
+```bash
+git clone https://github.com/Caripson/server-monitor.git
+cd server-monitor
+docker compose up -d
+```
 
-- **Bash & Python agents** – runs everywhere: Linux, Mac, Windows (WSL), Raspberry Pi, cloud VMs.
-- **Super simple config** – just edit one YAML file.
-- **Modern Docker stack** – one command, everything runs.
-- **Grafana dashboards auto-provisioned**.
-- **Public leaderboard support** (if you want).
-- **Alerting**: Slack, Discord, email – all standard via Grafana.
-- **REST API ready**: fetch/export metrics for your own tools.
+---
+
+> **Tips:** If you’re new to Docker, see [Get Started with Docker](https://docs.docker.com/get-started/).  
+> *On Windows/macOS, you always start “Docker Desktop” first before running commands in your terminal.*
 
 ---
 
@@ -174,7 +210,7 @@ See [InfluxDB 2.x API docs](https://docs.influxdata.com/influxdb/v2.0/api/) for 
 - **Do I have to share my data?**  
   Never! All data stays private unless you publish it or contribute to a public leaderboard.
 - **How can I get help?**  
-  Open an Issue, or see the wiki.
+  Open an Issue or see the wiki.
 
 ---
 
