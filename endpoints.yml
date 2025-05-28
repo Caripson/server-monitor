@@ -1,0 +1,11 @@
+# endpoints.yml
+endpoints:
+  - url: https://www.google.com/
+    name: Google
+    type: http
+  - url: https://cloudflare.com/
+    name: Cloudflare
+    type: http
+  - url: 8.8.8.8
+    name: Google DNS
+    type: ping
