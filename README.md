@@ -2,40 +2,81 @@
 
 ![Server Monitor Dashboard](2e5614e3-424a-498a-b720-3fae19a109b3.png)
 
-[![Docker Ready](https://img.shields.io/badge/docker-ready-blue.svg)]()
-[![Stars](https://img.shields.io/github/stars/Caripson/server-monitor)]()
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)]()
+---
 
-Open-source, plug-and-play server & network monitoring with Bash/Python agents, InfluxDB 2.x, Grafana 10+ dashboards, public leaderboard, and real-time alerts.
+## What is Server Monitor 2.0? 🛰️
+
+**Server Monitor 2.0** is an open-source, plug-and-play platform for monitoring and comparing server, network, and API performance across the internet or within your own infrastructure.  
+It is designed for **everyone** – from solo developers and small teams to power users and communities – who want simple, transparent, real-time insights into latency, availability, and basic network health.
+
+- **Run your own agent** (Bash or Python) from anywhere.
+- **Visualize results instantly** in Grafana, either locally or on your own cloud.
+- **Contribute data** (if you want) to a public leaderboard.
+- **Set up custom alerts** (Slack, Discord, Email) for issues.
+- **Keep your data private – or share it for science!**
 
 ---
 
-## 🚀 Quick Start (Docker Compose)
+## Why does this project exist? 🎯
 
-1. Clone the repo and enter the directory:
+- **Internet monitoring shouldn't be hard**. Most commercial tools are complex, expensive, or limit transparency.
+- **You own your data.** You choose if it’s private or public.
+- **Crowdsourced stats are powerful.** By sharing anonymized metrics, we all get a better picture of network health and CDN/provider performance – globally or regionally.
+- **Easy, fast setup.** From git clone to dashboard in minutes.
+
+---
+
+## Key Features
+
+- **Bash & Python agents** – runs everywhere: Linux, Mac, Windows (WSL), Raspberry Pi, cloud VMs.
+- **Super simple config** – just edit one YAML file.
+- **Modern Docker stack** – one command, everything runs.
+- **Grafana dashboards auto-provisioned**.
+- **Public leaderboard support** (if you want).
+- **Alerting**: Slack, Discord, email – all standard via Grafana.
+- **REST API ready**: fetch/export metrics for your own tools.
+
+---
+
+## 📦 Quick Start (For Beginners & Power Users)
+
+1. **Clone the repo**
     ```bash
     git clone https://github.com/Caripson/server-monitor.git
     cd server-monitor
     ```
 
-2. Start InfluxDB and Grafana:
+2. **Start with Docker Compose**
     ```bash
     docker compose up -d
     ```
+    This launches:
+    - **InfluxDB 2.x** (metrics database)
+    - **Grafana 10+** (visual dashboards)
 
-- InfluxDB: http://localhost:8086  
-  User: `admin`, Password: `supersecret`, Org: `server-monitor`, Token: `mytoken`
-- Grafana: http://localhost:3000  
-  User: `admin`, Password: `admin`
+3. **Access the dashboards**
+    - Grafana: [http://localhost:3000](http://localhost:3000) (User: `admin`, Pass: `admin`)
+    - InfluxDB: [http://localhost:8086](http://localhost:8086) (User: `admin`, Pass: `supersecret`, Org: `server-monitor`, Token: `mytoken`)
 
 ---
 
-## 🕵️‍♂️ Add Monitoring Agents
+## 📝 How It Works
 
-Define your endpoints in `endpoints.yml`:
+**You run an “agent” (script) on any computer/server.**  
+The agent:
+- Reads your targets (websites, IPs, DNS) from a config file (`endpoints.yml`)
+- Measures latency, ping, DNS or HTTP performance
+- Sends all data (with your agent name) to InfluxDB
+- Grafana shows everything, and can alert you if something is wrong
+
+---
+
+## 🔧 Setting Up Your Own Agent
+
+Edit the config:
 
 ```yaml
-agent: your-unique-agent-name  # e.g. johancar-stockholm-home
+agent: my-home-laptop # give your agent a unique name!
 
 endpoints:
   - url: https://www.google.com/
@@ -46,113 +87,128 @@ endpoints:
     type: ping
 ```
 
-**Run the Bash agent:**
+**Run in Bash:**
 ```bash
-pip install pyyaml  # for yaml parsing
+pip install pyyaml
 chmod +x agent.sh
 ./agent.sh
 ```
-
-**Or use the Python agent:**
+**Or Python:**
 ```bash
 pip install requests pyyaml
 python3 agent.py
 ```
 
-Metrics are sent directly to InfluxDB.  
-Run on any server, VM or your local machine!
+- You can run multiple agents from as many places as you want (home, VPS, datacenter, cloud).
+- Data appears automatically in your Grafana dashboard.
 
 ---
 
-## 📊 Automatic Grafana Setup
+## 🖥️ The Dashboard
 
-Dashboards and InfluxDB datasource are provisioned automatically!
-
-- Open Grafana ([http://localhost:3000](http://localhost:3000), admin/admin)
-- Dashboard: “Server Monitor” (in root folder)
-- Data is available as soon as your agent is running.
-
----
-
-## 🌍 Join the Community Monitor
-
-Want to contribute your measurements to the public leaderboard?
-
-1. Add a unique `agent` name in your `endpoints.yml`.
-2. Change your agent’s InfluxDB URL and TOKEN to the community server (see wiki for details).
-3. Start your agent – your data feeds the public dashboard!
-
-**See the public dashboard:**  
-[https://grafana.com/grafana/dashboards/](https://grafana.com/grafana/dashboards/)
+- Auto-generated!  
+- Shows all your endpoints, all your agents, over time.
+- Includes:  
+  - HTTP latency (total, connect, DNS, etc)
+  - Ping time
+  - **Leaderboard:** Compare your agents (who/where is fastest?)
 
 ---
 
-## 📡 Public REST API
+## 🌐 Public Dashboard, Community & “Fake” Links
 
-Want to fetch raw metrics or build your own dashboard?
+**The link below is an example**.  
+There is *no live service* at [https://community.monitor.example.com/grafana/d/public/leaderboard](https://community.monitor.example.com/grafana/d/public/leaderboard).  
+- If you want a **public dashboard**, you must host Grafana yourself (on your own domain).
+- Replace all “example.com” links with your real address!
+- Never share your InfluxDB admin tokens on a public server.
 
-**Example:** Query average HTTP latency (last 24h)
-```bash
-curl -G "https://community.monitor.example.com/api/v2/query?org=server-monitor"   -H "Authorization: Token YOUR_PUBLIC_TOKEN"   --data-urlencode 'query=from(bucket: "public") |> range(start: -24h) |> filter(fn: (r) => r._field == "time_total") |> group(columns:["agent"]) |> mean()'
-```
-See [InfluxDB 2.x API Docs](https://docs.influxdata.com/influxdb/v2.0/api/) for more info.
+**To set up your own public dashboard:**
+1. Deploy Grafana and InfluxDB on a public server (cloud VPS, Kubernetes, etc.)
+2. Set a real domain (use Let’s Encrypt or Cloudflare for HTTPS).
+3. Update your README and `endpoints.yml` with your new URLs.
+4. Share your link in your community or with your team!
+
+*Want to contribute to a real global leaderboard? Ping us in Issues or Discord!*
 
 ---
 
 ## 🚨 Alerts & Notifications
 
-Set up alerts in Grafana for real-time monitoring!
-
-- Slack, Discord, email, or any webhook
-- Example: Alert if any endpoint has time_total > 2 seconds
-- Go to: Alerting → Contact points → Add your notifier
-- Create alert rule on any panel with your threshold
-
-> See Grafana docs: https://grafana.com/docs/grafana/latest/alerting/
+- **Set up notifications in Grafana** – full docs [here](https://grafana.com/docs/grafana/latest/alerting/).
+- Slack, Discord, Email, Webhook, Teams – all supported.
+- Example: Alert if “total HTTP latency” > 2 seconds.
 
 ---
 
-## 🛠️ Building on the Data: API & Anomaly Detection
+## 🧠 Tips, Tricks & Corner Cases
 
-- Fetch your metrics via the REST API (see above).
-- Use included example scripts to detect anomalies or build your own integrations.
-- Easily trigger Slack, mail, or dashboard updates from code.
-
----
-
-## 🤝 Contributing
-
-Want to help?  
-- Fork this repo & create a feature branch  
-- Add your scripts, dashboards or docs  
-- Open a pull request!  
-- Or open an Issue for bugs, feature ideas or feedback
-
-*All contributors get a mention in the README and leaderboard if you want!*
+- **Firewall?** Make sure your agent machine can access your InfluxDB and targets.
+- **Run as cronjob:** Agents can be scheduled every minute/hour via crontab.
+- **Private vs. public:** Only you see your data unless you publish your Grafana dashboard.  
+  Don’t expose Grafana/InfluxDB admin interfaces to the open internet without security!
+- **Agent naming:** Use unique names for each agent/location/device – makes leaderboard and troubleshooting much easier.
+- **Token security:** Don’t share your InfluxDB admin token. Use read-only tokens for dashboards if public.
+- **Performance:** Low resource use, works well on Raspberry Pi or cloud micro-VM.
 
 ---
 
-## 🗺️ Roadmap
+## 🛠️ REST API & Export
 
-See [ROADMAP.md](./ROADMAP.md) for planned features and progress.
+**Export metrics via InfluxDB 2.x REST API for your own dashboards/tools.**
+```bash
+curl -G "http://localhost:8086/api/v2/query?org=server-monitor"   -H "Authorization: Token mytoken"   --data-urlencode 'query=from(bucket: "monitoring") |> range(start: -24h) |> filter(fn: (r) => r._field == "time_total") |> mean()'
+```
+See [InfluxDB 2.x API docs](https://docs.influxdata.com/influxdb/v2.0/api/) for more.
 
 ---
 
 ## ❓ FAQ
 
-- **“I can't connect my agent to InfluxDB?”**  
-  Make sure you're using the correct URL, org, bucket, and token (see Quick Start).
-- **“How do I set up alerts for email instead of Slack?”**  
-  Use Grafana alerting (Alerting → Contact Points → Add Email).
-- **“Can I run the agent on Windows/Mac?”**  
-  Yes! Both Bash and Python agents work cross-platform.
+- **Can I monitor things outside my home/office?**  
+  Yes! Deploy agents anywhere – at work, cloud, other continents…
+- **Does the agent need root/admin?**  
+  No, runs as a normal user.
+- **Windows support?**  
+  Yes, with WSL or native Python.
+- **Do I have to share my data?**  
+  Never! All data stays private unless you publish it or contribute to a public leaderboard.
+- **How can I get help?**  
+  Open an Issue, or see the wiki.
 
 ---
 
-## 💬 Community
+## 🤝 Contributing
 
-Questions? Want to discuss monitoring or share your dashboards?
-- Or open a GitHub Discussion
+- Fork & PR to add new checks, dashboards, scripts or docs
+- Feature requests, bug reports, and discussion: Use GitHub Issues
+- All contributors get credits in the README and leaderboard if you want!
 
 ---
 
+## 🗺️ Roadmap
+
+See [ROADMAP.md](./ROADMAP.md) for planned features, phases, and “what’s next”.
+
+---
+
+## 💬 Community & Support
+
+Questions or want to connect?
+- Or open a GitHub Discussion/Issue
+
+---
+
+## License
+
+MIT.  
+You own your data and can use the project for any purpose!
+
+---
+
+
+
+---
+
+### *Remember: All “example.com” links are placeholders!  
+Set up your own public dashboards if you want to share results or build a community!*
