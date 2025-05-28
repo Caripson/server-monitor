@@ -165,7 +165,7 @@ There is *no live service* at [https://community.monitor.example.com/grafana/d/p
 3. Update your README and `endpoints.yml` with your new URLs.
 4. Share your link in your community or with your team!
 
-*Want to contribute to a real global leaderboard? Ping us in Issues or Discord!*
+*Want to contribute to a real global leaderboard? Ping me!*
 
 ---
 
