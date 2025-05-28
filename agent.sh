@@ -8,6 +8,8 @@ parse_yaml() {
     python3 -c "import yaml,sys; print('\n'.join([f'{e['name']}|{e['url']}|{e.get('type','http')}' for e in yaml.safe_load(sys.stdin)['endpoints']]))"
 }
 
+AGENT=$(python3 -c "import yaml; print(yaml.safe_load(open('$CONFIG')).get('agent','anonymous'))")
+
 while IFS= read -r line; do
     NAME=$(echo $line | cut -d'|' -f1)
     URL=$(echo $line | cut -d'|' -f2)
@@ -19,10 +21,10 @@ while IFS= read -r line; do
         NLK=$(echo $RESULT | cut -d'|' -f1)
         CNK=$(echo $RESULT | cut -d'|' -f2)
         TTL=$(echo $RESULT | cut -d'|' -f3)
-        LINE="monitor,name=$NAME,type=$TYPE time_namelookup=$NLK,time_connect=$CNK,time_total=$TTL $TIMESTAMP"
+        LINE="monitor,name=$NAME,type=$TYPE,agent=$AGENT time_namelookup=$NLK,time_connect=$CNK,time_total=$TTL $TIMESTAMP"
     elif [ "$TYPE" = "ping" ]; then
         PING=$(ping -c 1 -w 1 $URL | grep 'time=' | awk -F'time=' '{print $2}' | awk '{print $1}')
-        LINE="monitor,name=$NAME,type=$TYPE ping_time=${PING:-0} $TIMESTAMP"
+        LINE="monitor,name=$NAME,type=$TYPE,agent=$AGENT ping_time=${PING:-0} $TIMESTAMP"
     fi
 
     curl -s -XPOST "$INFLUX_URL" \
