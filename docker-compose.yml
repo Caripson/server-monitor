@@ -30,4 +30,5 @@ services:
     volumes:
       - ./data/grafana:/var/lib/grafana
       - ./config/grafana:/etc/grafana
-      - ./provisioning:/etc/grafana/provisioning # För automatiserad dashboard/datakälla (nästa steg)
+      - ./provisioning:/etc/grafana/provisioning 
+      
