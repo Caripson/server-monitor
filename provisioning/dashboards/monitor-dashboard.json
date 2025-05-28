@@ -1,0 +1,49 @@
+{
+  "id": null,
+  "title": "Server Monitor",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "HTTP Total Time",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "-100"
+          },
+          "query": "from(bucket: \"monitoring\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"monitor\" and r._field == \"time_total\")",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "displayName": "Total Time"
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Ping Time",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "-100"
+          },
+          "query": "from(bucket: \"monitoring\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"monitor\" and r._field == \"ping_time\")",
+          "refId": "B"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "displayName": "Ping Time"
+        }
+      }
+    }
+  ],
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "30s"
+}
