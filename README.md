@@ -195,7 +195,7 @@ See [ROADMAP.md](./ROADMAP.md) for planned features, phases, and “what’s nex
 ## 💬 Community & Support
 
 Questions or want to connect?
-- Or open a GitHub Discussion/Issue
+- Open a GitHub Discussion/Issue
 
 ---
 
