@@ -1,3 +1,26 @@
+# Server Monitor 2.0
+
+**Modern, open-source server and network monitoring with plug-and-play agents, InfluxDB, and Grafana dashboards. Crowdsourcing and alerting ready.**
+
+---
+
+> ⚡️ **Version 2.0 in progress!**  
+> See [ROADMAP.md](./ROADMAP.md) for all planned updates and features.  
+> This project is being fully modernized for 2024+ – Docker-first, Python and Bash agents, YAML/JSON config, and open community support.
+
+---
+
+## What’s new (work in progress):
+
+- Docker Compose for one-line startup
+- InfluxDB 2.x and Grafana 10+ support
+- Plug-and-play agent (Bash/Python) – monitor HTTP, DNS, API endpoints
+- Crowdsourcing: Contribute data from anywhere, see public dashboards!
+- Smart alerts (Slack, Discord, Email)
+- Modern onboarding and docs
+
+---
+
 # server-monitor
 
 Simple server monitor with agents that reports to influxdb and grafana
