@@ -7,10 +7,7 @@
       "title": "HTTP Total Time",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "-100"
-          },
+          "datasource": { "type": "influxdb", "uid": "-100" },
           "query": "from(bucket: \"monitoring\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"monitor\" and r._field == \"time_total\")",
           "refId": "A"
         }
@@ -27,10 +24,7 @@
       "title": "Ping Time",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "-100"
-          },
+          "datasource": { "type": "influxdb", "uid": "-100" },
           "query": "from(bucket: \"monitoring\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"monitor\" and r._field == \"ping_time\")",
           "refId": "B"
         }
@@ -39,6 +33,22 @@
         "defaults": {
           "unit": "ms",
           "displayName": "Ping Time"
+        }
+      }
+    },
+    {
+      "type": "table",
+      "title": "Latency Leaderboard (last hour)",
+      "targets": [
+        {
+          "datasource": { "type": "influxdb", "uid": "-100" },
+          "query": "from(bucket: \"monitoring\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"monitor\" and r._field == \"time_total\") |> group(columns:[\"agent\"]) |> mean() |> sort(columns:[\"_value\"], desc:false)",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "Avg Total Time"
         }
       }
     }
