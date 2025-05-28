@@ -1,5 +1,6 @@
 # Server Monitor 2.0
 
+![Server Monitor Dashboard](2e5614e3-424a-498a-b720-3fae19a109b3.png)
 
 [![Docker Ready](https://img.shields.io/badge/docker-ready-blue.svg)]()
 [![Stars](https://img.shields.io/github/stars/Caripson/server-monitor)]()
